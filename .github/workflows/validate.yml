@@ -1,0 +1,29 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-agents:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
+      - run: python3 scripts/validate.py
+      - name: Shellcheck installer
+        run: shellcheck install.sh
+      - name: Install into a temp HOME
+        run: |
+          export HOME="$(mktemp -d)"
+          ./install.sh
+          test -L "$HOME/.config/opencode/agents/cuadrilla.md"
+          ./install.sh --uninstall
+          test ! -e "$HOME/.config/opencode/agents/cuadrilla.md"

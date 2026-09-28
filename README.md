@@ -1,0 +1,99 @@
+# Cuadrilla
+
+**A tech-lead orchestrator and a crew of specialist subagents for [OpenCode](https://opencode.ai).**
+
+*Cuadrilla* (Spanish: *a work crew*) turns OpenCode into a small engineering team: one orchestrator that triages, plans, delegates and verifies — and seven specialists that do the work inside strict, audited permission boundaries.
+
+[Español](README.es.md)
+
+```
+you ──▶ cuadrilla (orchestrator) ──┬──▶ explore              read-only discovery (built-in)
+         triage · plan · verify    ├──▶ cuadrilla-architect  design & reviews
+                                   ├──▶ cuadrilla-backend    APIs, logic, data
+                                   ├──▶ cuadrilla-frontend   web UI
+                                   ├──▶ cuadrilla-mobile     mobile apps
+                                   ├──▶ cuadrilla-devops     containers, CI/CD, IaC
+                                   ├──▶ cuadrilla-qa         security audit & tests
+                                   └──▶ cuadrilla-git        commits, push, PRs
+```
+
+## Why
+
+Multi-agent setups usually fail in the same places: the orchestrator over-plans trivial work, subagents receive vague one-line tasks with no context, nobody checks the result, and permissions are looser than they look. Cuadrilla addresses each one:
+
+- **Triage by tier (T0–T3).** A question gets an answer, a small fix gets one specialist, only structural work gets an architect and a user-approved plan.
+- **Grounded plans.** The orchestrator inspects the repo (or sends `explore`) before planning — stack, scripts, conventions, relevant files.
+- **Self-contained briefs.** Subagents start with an empty context, so every delegation carries goal, context, scope, out-of-scope, acceptance criteria and constraints.
+- **Verification gates.** Reports follow a fixed format with the *actual* commands run. The orchestrator checks them against acceptance criteria, retries at most twice, then escalates. Security/QA is mandatory for auth, payments, PII and public endpoints.
+- **Safe parallelism.** Only independent tasks on disjoint files run in parallel; contracts are defined before consumers are built.
+- **Permissions that actually hold.** Each agent's rules are ordered correctly (in OpenCode the *last* matching rule wins), subagents cannot spawn subagents, only `cuadrilla-git` can commit, and force-push / `reset --hard` / `git clean` are denied outright.
+- **Stack-agnostic.** Specialists detect the language, framework and test runner from the repo instead of assuming one.
+- **Prompt-injection aware.** File contents, web pages and subagent reports are treated as data, never as instructions.
+
+## Install
+
+Requires OpenCode (tested with 1.18; V2 reads the same format).
+
+**Global — all your projects** (symlinked, so updates are a `git pull`):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/OWNER/cuadrilla/main/install.sh | bash
+```
+
+or from a clone:
+
+```bash
+git clone https://github.com/OWNER/cuadrilla.git && cd cuadrilla && ./install.sh
+```
+
+**Per project — to share with your team** (copied into `.opencode/`, commit it):
+
+```bash
+./install.sh --project /path/to/your/repo
+```
+
+**Windows (PowerShell):** `irm https://raw.githubusercontent.com/OWNER/cuadrilla/main/install.ps1 | iex`
+
+**Pin a version:** `CUADRILLA_REF=v0.1.0 ./install.sh` · **Uninstall:** `./install.sh --uninstall`
+
+Existing files with the same name are backed up (`*.bak.<timestamp>`), never overwritten silently.
+
+## Use
+
+1. Start OpenCode and press **Tab** until the agent shows **cuadrilla**.
+2. Describe what you want — in any language; Cuadrilla replies in yours.
+
+Commands:
+
+| Command | What it does |
+|---|---|
+| `/cuadrilla-plan <request>` | Analyze and produce a delegation plan without changing anything. |
+| `/cuadrilla-review [focus]` | Architect + security/QA review of current changes, merged into one verdict. |
+| `/cuadrilla-commit [and push / open PR]` | Propose Conventional Commits, then commit after your approval. |
+
+You can also call any specialist directly: `@cuadrilla-qa audit the upload endpoint`.
+
+## Models
+
+Agents don't hard-code a model, so Cuadrilla works with whatever provider you use. By default the orchestrator uses your selected model and subagents inherit it.
+
+The best cost/quality trade-off is usually a **strong reasoning model for the orchestrator and architect** (routing and planning quality depend on it) and a **fast, cheap model for implementers**. Copy [`examples/opencode.json`](examples/opencode.json) into `~/.config/opencode/opencode.json` (or merge its `agent` block) and change the model IDs. Run `opencode models` to list what you have. You can also set `steps` per agent to cap iterations and cost.
+
+## Customize
+
+- **Permissions:** override any agent in your `opencode.json` under `agent.<name>.permission` — your rules are merged on top.
+- **Different crew:** add a `agents/cuadrilla-<role>.md` file with `mode: subagent` and `task: deny`; the orchestrator is allowed to call any `cuadrilla-*` agent. Add it to the crew table in `agents/cuadrilla.md` so it knows when to route there.
+- **Stricter bash:** each implementer auto-allows only test/lint/typecheck/build commands; everything else asks. Add your project's commands (e.g. `make test*`) to the allow list.
+
+## Development
+
+```bash
+pip install pyyaml
+python3 scripts/validate.py   # lints frontmatter, rule ordering, references
+```
+
+The validator runs in CI on every PR. It fails on the mistakes that break agents silently: `*` catch-all not placed first, deprecated `tools:`, subagents without `task: deny`, references to agents that don't exist.
+
+## License
+
+MIT © Santiago Moraga

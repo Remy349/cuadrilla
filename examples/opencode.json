@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "cuadrilla": { "model": "opencode-go/deepseek-v4-pro" },
+    "cuadrilla-architect": { "model": "opencode-go/deepseek-v4-pro" },
+    "cuadrilla-backend": { "model": "opencode-go/deepseek-v4-flash" },
+    "cuadrilla-frontend": { "model": "opencode-go/deepseek-v4-flash" },
+    "cuadrilla-mobile": { "model": "opencode-go/deepseek-v4-flash" },
+    "cuadrilla-devops": { "model": "opencode-go/deepseek-v4-flash" },
+    "cuadrilla-qa": { "model": "opencode-go/deepseek-v4-flash" },
+    "cuadrilla-git": { "model": "opencode-go/deepseek-v4-flash", "steps": 25 },
+    "explore": { "model": "opencode-go/deepseek-v4-flash" }
+  }
+}
