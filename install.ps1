@@ -1,5 +1,5 @@
 # Cuadrilla installer for OpenCode (Windows PowerShell)
-#   irm https://raw.githubusercontent.com/OWNER/cuadrilla/main/install.ps1 | iex
+#   irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
 #   .\install.ps1                    # global
 #   .\install.ps1 -Project .         # into .\.opencode
 #   .\install.ps1 -Uninstall
@@ -9,7 +9,7 @@ param(
 )
 $ErrorActionPreference = "Stop"
 
-$RepoUrl  = if ($env:CUADRILLA_REPO) { $env:CUADRILLA_REPO } else { "https://github.com/OWNER/cuadrilla.git" }
+$RepoUrl  = if ($env:CUADRILLA_REPO) { $env:CUADRILLA_REPO } else { "https://github.com/Remy349/cuadrilla.git" }
 $Ref      = if ($env:CUADRILLA_REF)  { $env:CUADRILLA_REF }  else { "main" }
 $CloneDir = if ($env:CUADRILLA_HOME) { $env:CUADRILLA_HOME } else { Join-Path $env:LOCALAPPDATA "cuadrilla" }
 

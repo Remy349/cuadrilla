@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Cuadrilla installer for OpenCode — https://github.com/OWNER/cuadrilla
+# Cuadrilla installer for OpenCode — https://github.com/Remy349/cuadrilla
 #
 #   Global (all projects), symlinked so `git pull` updates it:
-#     curl -fsSL https://raw.githubusercontent.com/OWNER/cuadrilla/main/install.sh | bash
+#     curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | bash
 #   or, from a clone:
 #     ./install.sh
 #
@@ -13,7 +13,7 @@
 #     ./install.sh --uninstall [--project [dir]]
 set -euo pipefail
 
-REPO_URL="${CUADRILLA_REPO:-https://github.com/OWNER/cuadrilla.git}"
+REPO_URL="${CUADRILLA_REPO:-https://github.com/Remy349/cuadrilla.git}"
 REF="${CUADRILLA_REF:-main}"
 CLONE_DIR="${CUADRILLA_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/cuadrilla}"
 

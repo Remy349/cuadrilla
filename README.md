@@ -37,13 +37,13 @@ Requires OpenCode (tested with 1.18; V2 reads the same format).
 **Global — all your projects** (symlinked, so updates are a `git pull`):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/OWNER/cuadrilla/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | bash
 ```
 
 or from a clone:
 
 ```bash
-git clone https://github.com/OWNER/cuadrilla.git && cd cuadrilla && ./install.sh
+git clone https://github.com/Remy349/cuadrilla.git && cd cuadrilla && ./install.sh
 ```
 
 **Per project — to share with your team** (copied into `.opencode/`, commit it):
@@ -52,7 +52,7 @@ git clone https://github.com/OWNER/cuadrilla.git && cd cuadrilla && ./install.sh
 ./install.sh --project /path/to/your/repo
 ```
 
-**Windows (PowerShell):** `irm https://raw.githubusercontent.com/OWNER/cuadrilla/main/install.ps1 | iex`
+**Windows (PowerShell):** `irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex`
 
 **Pin a version:** `CUADRILLA_REF=v0.1.0 ./install.sh` · **Uninstall:** `./install.sh --uninstall`
 

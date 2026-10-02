@@ -11,7 +11,7 @@ Un orquestador que clasifica, planifica, delega y verifica, y siete especialista
 **Global** (enlaces simbólicos; se actualiza con `git pull`):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/OWNER/cuadrilla/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | bash
 ```
 
 **Por proyecto** (se copia a `.opencode/` para commitearlo con el equipo):
@@ -20,7 +20,7 @@ curl -fsSL https://raw.githubusercontent.com/OWNER/cuadrilla/main/install.sh | b
 ./install.sh --project /ruta/a/tu/repo
 ```
 
-**Windows:** `irm https://raw.githubusercontent.com/OWNER/cuadrilla/main/install.ps1 | iex`
+**Windows:** `irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex`
 
 Fijar versión: `CUADRILLA_REF=v0.1.0 ./install.sh` · Desinstalar: `./install.sh --uninstall`
 
