@@ -84,3 +84,6 @@ try {
   $ErrorActionPreference = "Continue"
   Remove-Item -Recurse -Force $Tmp -ErrorAction SilentlyContinue
 }
+# All assertions passed. Exit explicitly: the negative test leaves git's exit code (128)
+# in $LASTEXITCODE, and CI runners report that as the script's result.
+exit 0
