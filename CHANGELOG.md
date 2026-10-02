@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+- Release automation: finishes a release whose tag exists but whose GitHub Release is missing; release runs are serialized; manual backfill inputs removed (GitHub's `GITHUB_TOKEN` cannot tag commits whose workflow files differ — backfill locally with `scripts/release.sh vX.Y.Z <commit>`). Local runs tag with your own git identity.
+- README/installers: pin examples point to the published `v0.1.1` (they referenced the untagged `v0.1.0`) and link the Releases page.
+- CI: `actions/checkout@v5` and `actions/setup-python@v6` (Node 20 is deprecated on runners).
+
 ## v0.1.1 — 2026-10-02
 - Windows: `install.ps1` stops on git failures with a clear error, works when `CUADRILLA_REF` is a tag (no `pull` on a detached HEAD), adds `-Ref`, never creates folders on uninstall, and prints next steps.
 - Linux/macOS: `install.sh` no longer swallows `pull` errors on branches and handles tags explicitly.

@@ -4,7 +4,7 @@
 #   Global (all projects), symlinked so `git pull` updates it:
 #     curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | bash
 #   Pin a version (remote installs only; a clone installs whatever it has checked out):
-#     curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.1.0 bash
+#     curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.1.1 bash
 #   or, from a clone:
 #     ./install.sh
 #
@@ -34,7 +34,7 @@ Options:
   --uninstall       Remove Cuadrilla agents and commands from the target
   -h, --help        Show this help
 Environment:
-  CUADRILLA_REF     Git branch or tag to install (default: main), e.g. v0.1.0
+  CUADRILLA_REF     Git branch or tag to install (default: main), e.g. v0.1.1
   CUADRILLA_REPO    Git URL to clone (default: the GitHub repo)
   CUADRILLA_HOME    Where the repo is cloned for remote installs
 EOF

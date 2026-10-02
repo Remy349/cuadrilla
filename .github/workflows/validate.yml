@@ -5,14 +5,8 @@ on:
     branches: [main]
     tags: ["v*"]
   pull_request:
+  # Manual run on main: re-runs the checks and retries a release that didn't finish.
   workflow_dispatch:
-    inputs:
-      version:
-        description: "Release a specific CHANGELOG version (e.g. v0.1.0). Empty = top of CHANGELOG.md"
-        required: false
-      ref:
-        description: "Commit to tag (e.g. a03ab80). Empty = the selected branch head"
-        required: false
 
 permissions:
   contents: read
@@ -21,8 +15,8 @@ jobs:
   lint-agents:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - run: pip install pyyaml
@@ -31,7 +25,7 @@ jobs:
   install-linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Shellcheck installer, tests and release script
         run: shellcheck install.sh scripts/test-install.sh scripts/release.sh
       - name: End-to-end install test
@@ -48,7 +42,7 @@ jobs:
       run:
         shell: ${{ matrix.shell }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: PSScriptAnalyzer
         if: matrix.shell == 'pwsh'
         run: |
@@ -69,21 +63,24 @@ jobs:
       - name: End-to-end install test
         run: ./scripts/test-install.ps1
 
-  # Tags the version at the top of CHANGELOG.md (or the one given on a manual run) and
-  # publishes its GitHub Release -- only from main, and only after every check passed.
+  # Tags the version at the top of CHANGELOG.md and publishes its GitHub Release --
+  # only from main, and only after every check passed. Older commits can't be tagged
+  # from here: GITHUB_TOKEN may not create refs to commits whose workflow files differ
+  # (that needs the `workflows` permission), so backfills are done by a maintainer.
   release:
     needs: [lint-agents, install-linux, install-windows]
+    concurrency:
+      group: release
+      cancel-in-progress: false
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0 # tags and older commits
       - name: Tag and publish release
         env:
           GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ inputs.version }}
-          REF: ${{ inputs.ref }}
-        run: scripts/release.sh "$VERSION" "$REF"
+        run: scripts/release.sh
