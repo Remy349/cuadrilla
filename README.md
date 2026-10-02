@@ -49,10 +49,10 @@ Requires [OpenCode](https://opencode.ai) (tested with 1.18; V2 reads the same fo
 curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | bash
 ```
 
-**Pin a release** (recommended for teams and reproducible setups):
+**Pin a release** (recommended for teams and reproducible setups; versions on the [Releases](https://github.com/Remy349/cuadrilla/releases) page):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.1.0 bash
+curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.1.1 bash
 ```
 
 **Per project — to share with your team** (copied into `.opencode/`, commit it):
@@ -75,7 +75,7 @@ irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
 **Pin a release:**
 
 ```powershell
-$env:CUADRILLA_REF = "v0.1.0"; irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
+$env:CUADRILLA_REF = "v0.1.1"; irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
 ```
 
 **Per project — to share with your team:**
@@ -99,7 +99,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1 -Project C:\path\to\your\
 
 ### All platforms
 
-Existing files with the same name are backed up (`*.bak.<timestamp>`), never overwritten silently. Releases are listed in [`CHANGELOG.md`](CHANGELOG.md); `CUADRILLA_REF` accepts any tag or branch (default `main`).
+Existing files with the same name are backed up (`*.bak.<timestamp>`), never overwritten silently. Releases are listed in [`CHANGELOG.md`](CHANGELOG.md) and on the [Releases](https://github.com/Remy349/cuadrilla/releases) page; `CUADRILLA_REF` accepts any tag or branch (default `main`).
 
 ## Use
 
@@ -141,7 +141,7 @@ The validator runs in CI on every PR. It fails on the mistakes that break agents
 
 CI also runs both installer tests — `install.sh` on Ubuntu (plus shellcheck) and `install.ps1` on Windows under both PowerShell 5.1 and 7 (plus PSScriptAnalyzer) — covering global, per-project, backups, uninstall and installs pinned to a tag.
 
-**Releasing** is automated. Rename the top `## Unreleased` entry of `CHANGELOG.md` to `## vX.Y.Z — date` and merge to `main`: once every check passes, CI tags that commit and publishes the GitHub Release with the entry as notes ([`scripts/release.sh`](scripts/release.sh)). To release an older version at a specific commit, run the **validate** workflow from the Actions tab with `version` and `ref`. Tags are never moved once pushed; preview with `scripts/release.sh --dry-run`.
+**Releasing** is automated. Rename the top `## Unreleased` entry of `CHANGELOG.md` to `## vX.Y.Z — date` and merge to `main`: once every check passes, CI tags that commit and publishes the GitHub Release with the entry as notes ([`scripts/release.sh`](scripts/release.sh)). A release that failed halfway can be finished by re-running the **validate** workflow on `main` from the Actions tab. To tag an older commit, run `scripts/release.sh vX.Y.Z <commit>` locally with your own credentials (CI's token is not allowed to tag commits whose workflow files differ). Tags are never moved once pushed; preview with `scripts/release.sh --dry-run`.
 
 ## License
 

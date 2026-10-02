@@ -25,10 +25,10 @@ Requiere [OpenCode](https://opencode.ai) y `git`. Usa la sección de **tu shell*
 curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | bash
 ```
 
-**Fijar una versión** (recomendado para equipos y setups reproducibles):
+**Fijar una versión** (recomendado para equipos y setups reproducibles; versiones en [Releases](https://github.com/Remy349/cuadrilla/releases)):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.1.0 bash
+curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.1.1 bash
 ```
 
 **Por proyecto** (se copia a `.opencode/` para commitearlo con el equipo):
@@ -51,7 +51,7 @@ irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
 **Fijar una versión:**
 
 ```powershell
-$env:CUADRILLA_REF = "v0.1.0"; irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
+$env:CUADRILLA_REF = "v0.1.1"; irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
 ```
 
 **Por proyecto:**
@@ -75,7 +75,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1 -Project C:\ruta\a\tu\rep
 
 ### Todas las plataformas
 
-Los archivos existentes con el mismo nombre se respaldan (`*.bak.<timestamp>`), nunca se sobrescriben en silencio. Las versiones están en [`CHANGELOG.md`](CHANGELOG.md); `CUADRILLA_REF` acepta cualquier tag o rama (por defecto `main`).
+Los archivos existentes con el mismo nombre se respaldan (`*.bak.<timestamp>`), nunca se sobrescriben en silencio. Las versiones están en [`CHANGELOG.md`](CHANGELOG.md) y en [Releases](https://github.com/Remy349/cuadrilla/releases); `CUADRILLA_REF` acepta cualquier tag o rama (por defecto `main`).
 
 ## Uso
 
