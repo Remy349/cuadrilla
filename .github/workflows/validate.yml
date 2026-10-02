@@ -3,6 +3,7 @@ name: validate
 on:
   push:
     branches: [main]
+    tags: ["v*"]
   pull_request:
 
 permissions:
@@ -18,12 +19,44 @@ jobs:
           python-version: "3.12"
       - run: pip install pyyaml
       - run: python3 scripts/validate.py
-      - name: Shellcheck installer
-        run: shellcheck install.sh
-      - name: Install into a temp HOME
+
+  install-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shellcheck installer and tests
+        run: shellcheck install.sh scripts/test-install.sh
+      - name: End-to-end install test
+        run: scripts/test-install.sh
+
+  install-windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # powershell = Windows PowerShell 5.1 (what most Windows users have), pwsh = PowerShell 7
+        shell: [powershell, pwsh]
+    defaults:
+      run:
+        shell: ${{ matrix.shell }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: PSScriptAnalyzer
+        if: matrix.shell == 'pwsh'
         run: |
-          export HOME="$(mktemp -d)"
-          ./install.sh
-          test -L "$HOME/.config/opencode/agents/cuadrilla.md"
-          ./install.sh --uninstall
-          test ! -e "$HOME/.config/opencode/agents/cuadrilla.md"
+          if (-not (Get-Module -ListAvailable PSScriptAnalyzer)) {
+            Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+          }
+          # Write-Host: the installer talks to an interactive console. Invoke-Expression: the test
+          # replays the `irm | iex` path on purpose.
+          $issues = foreach ($file in "install.ps1", "scripts/test-install.ps1") {
+            Invoke-ScriptAnalyzer -Path $file -Severity Warning, Error `
+              -ExcludeRule PSAvoidUsingWriteHost, PSAvoidUsingInvokeExpression
+          }
+          $issues | Format-Table -AutoSize
+          if ($issues) { exit 1 }
+      - name: install.ps1 is ASCII-only (Windows PowerShell 5.1 reads BOM-less files as ANSI)
+        run: |
+          if ((Get-Content install.ps1 -Raw) -match '[^\x00-\x7F]') { throw "install.ps1 contains non-ASCII characters" }
+      - name: End-to-end install test
+        run: ./scripts/test-install.ps1

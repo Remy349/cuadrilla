@@ -8,21 +8,74 @@ Un orquestador que clasifica, planifica, delega y verifica, y siete especialista
 
 ## Instalación
 
-**Global** (enlaces simbólicos; se actualiza con `git pull`):
+Requiere [OpenCode](https://opencode.ai) y `git`. Usa la sección de **tu shell**: el comando de Linux no funciona en PowerShell (ahí `curl` es un alias de `Invoke-WebRequest`).
+
+| | Linux · macOS · WSL · Git Bash | Windows (PowerShell 5.1 o 7) |
+|---|---|---|
+| Instalador | `install.sh` | `install.ps1` |
+| Instalación global | enlaces simbólicos → se actualiza con `git pull` | copia → se actualiza re-ejecutando |
+| Agentes en | `~/.config/opencode/` | `%USERPROFILE%\.config\opencode\` |
+| Clon en | `~/.local/share/cuadrilla` | `%LOCALAPPDATA%\cuadrilla` |
+
+### Linux / macOS
+
+**Global — todos tus proyectos:**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | bash
 ```
 
+**Fijar una versión** (recomendado para equipos y setups reproducibles):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.1.0 bash
+```
+
 **Por proyecto** (se copia a `.opencode/` para commitearlo con el equipo):
 
 ```bash
+git clone https://github.com/Remy349/cuadrilla.git && cd cuadrilla
 ./install.sh --project /ruta/a/tu/repo
 ```
 
-**Windows:** `irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex`
+**Actualizar:** `git -C ~/.local/share/cuadrilla pull` (global) · **Desinstalar:** `./install.sh --uninstall [--project <dir>]`
 
-Fijar versión: `CUADRILLA_REF=v0.1.0 ./install.sh` · Desinstalar: `./install.sh --uninstall`
+### Windows (PowerShell)
+
+**Global — todos tus proyectos:**
+
+```powershell
+irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
+```
+
+**Fijar una versión:**
+
+```powershell
+$env:CUADRILLA_REF = "v0.1.0"; irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
+```
+
+**Por proyecto:**
+
+```powershell
+git clone https://github.com/Remy349/cuadrilla.git; cd cuadrilla
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -Project C:\ruta\a\tu\repo
+```
+
+**Actualizar:** vuelve a ejecutar el comando global · **Desinstalar:** `powershell -ExecutionPolicy Bypass -File .\install.ps1 -Uninstall [-Project <dir>]`
+
+<details>
+<summary>Problemas comunes en Windows</summary>
+
+- **`No se encuentra ningún parámetro que coincida con el nombre del parámetro 'fsSL'`**: ejecutaste el comando de Linux en PowerShell. Usa el comando de PowerShell de arriba (o el de Linux desde Git Bash).
+- **`git is required`**: instala Git (`winget install Git.Git`) y abre una terminal nueva.
+- **`la ejecución de scripts está deshabilitada en este sistema`**: solo afecta a `.\install.ps1` desde un clon; usa `powershell -ExecutionPolicy Bypass -File .\install.ps1`. `irm | iex` no se ve afectado.
+- **La red corporativa bloquea `raw.githubusercontent.com`**: clona el repo (o descarga el ZIP) y ejecuta `install.ps1` desde ahí; usa los archivos locales y no necesita red.
+
+</details>
+
+### Todas las plataformas
+
+Los archivos existentes con el mismo nombre se respaldan (`*.bak.<timestamp>`), nunca se sobrescriben en silencio. Las versiones están en [`CHANGELOG.md`](CHANGELOG.md); `CUADRILLA_REF` acepta cualquier tag o rama (por defecto `main`).
 
 ## Uso
 

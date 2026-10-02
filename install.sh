@@ -3,6 +3,8 @@
 #
 #   Global (all projects), symlinked so `git pull` updates it:
 #     curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | bash
+#   Pin a version (remote installs only; a clone installs whatever it has checked out):
+#     curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.1.0 bash
 #   or, from a clone:
 #     ./install.sh
 #
@@ -33,6 +35,7 @@ Options:
   -h, --help        Show this help
 Environment:
   CUADRILLA_REF     Git branch or tag to install (default: main), e.g. v0.1.0
+  CUADRILLA_REPO    Git URL to clone (default: the GitHub repo)
   CUADRILLA_HOME    Where the repo is cloned for remote installs
 EOF
 }
@@ -67,13 +70,16 @@ else
   command -v git >/dev/null || { echo "git is required" >&2; exit 1; }
   if [[ -d "$CLONE_DIR/.git" ]]; then
     info "Updating $CLONE_DIR ($REF)"
-    git -C "$CLONE_DIR" fetch --quiet --tags origin
+    git -C "$CLONE_DIR" fetch --quiet --tags --force origin
     git -C "$CLONE_DIR" checkout --quiet "$REF"
-    git -C "$CLONE_DIR" pull --quiet --ff-only origin "$REF" 2>/dev/null || true
+    # A tag leaves HEAD detached and has nothing to pull; only branches are updated.
+    if git -C "$CLONE_DIR" symbolic-ref -q HEAD >/dev/null; then
+      git -C "$CLONE_DIR" pull --quiet --ff-only origin "$REF"
+    fi
   else
     info "Cloning $REPO_URL ($REF) into $CLONE_DIR"
     mkdir -p "$(dirname "$CLONE_DIR")"
-    git clone --quiet --branch "$REF" "$REPO_URL" "$CLONE_DIR"
+    git -c advice.detachedHead=false clone --quiet --branch "$REF" "$REPO_URL" "$CLONE_DIR"
   fi
   src="$CLONE_DIR"
 fi
