@@ -32,31 +32,74 @@ Multi-agent setups usually fail in the same places: the orchestrator over-plans 
 
 ## Install
 
-Requires OpenCode (tested with 1.18; V2 reads the same format).
+Requires [OpenCode](https://opencode.ai) (tested with 1.18; V2 reads the same format) and `git`. Pick the section for **your shell** — the Linux command does not work in PowerShell (there `curl` is an alias of `Invoke-WebRequest`).
 
-**Global — all your projects** (symlinked, so updates are a `git pull`):
+| | Linux · macOS · WSL · Git Bash | Windows (PowerShell 5.1 or 7) |
+|---|---|---|
+| Installer | `install.sh` | `install.ps1` |
+| Global install | symlinks → update with `git pull` | copies → update by re-running |
+| Agents go to | `~/.config/opencode/` | `%USERPROFILE%\.config\opencode\` |
+| Clone kept in | `~/.local/share/cuadrilla` | `%LOCALAPPDATA%\cuadrilla` |
+
+### Linux / macOS
+
+**Global — all your projects:**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | bash
 ```
 
-or from a clone:
+**Pin a release** (recommended for teams and reproducible setups):
 
 ```bash
-git clone https://github.com/Remy349/cuadrilla.git && cd cuadrilla && ./install.sh
+curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.1.0 bash
 ```
 
 **Per project — to share with your team** (copied into `.opencode/`, commit it):
 
 ```bash
+git clone https://github.com/Remy349/cuadrilla.git && cd cuadrilla
 ./install.sh --project /path/to/your/repo
 ```
 
-**Windows (PowerShell):** `irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex`
+**Update:** `git -C ~/.local/share/cuadrilla pull` (global) · **Uninstall:** `./install.sh --uninstall [--project <dir>]`
 
-**Pin a version:** `CUADRILLA_REF=v0.1.0 ./install.sh` · **Uninstall:** `./install.sh --uninstall`
+### Windows (PowerShell)
 
-Existing files with the same name are backed up (`*.bak.<timestamp>`), never overwritten silently.
+**Global — all your projects:**
+
+```powershell
+irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
+```
+
+**Pin a release:**
+
+```powershell
+$env:CUADRILLA_REF = "v0.1.0"; irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
+```
+
+**Per project — to share with your team:**
+
+```powershell
+git clone https://github.com/Remy349/cuadrilla.git; cd cuadrilla
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -Project C:\path\to\your\repo
+```
+
+**Update:** run the global command again · **Uninstall:** `powershell -ExecutionPolicy Bypass -File .\install.ps1 -Uninstall [-Project <dir>]`
+
+<details>
+<summary>Windows troubleshooting</summary>
+
+- **`No se encuentra ningún parámetro... 'fsSL'` / `A parameter cannot be found that matches parameter name 'fsSL'`** — you ran the Linux command in PowerShell. Use the PowerShell command above (or run the Linux one from Git Bash).
+- **`git is required`** — install Git (`winget install Git.Git`) and open a new terminal.
+- **`running scripts is disabled on this system`** — only affects running `.\install.ps1` from a clone; use `powershell -ExecutionPolicy Bypass -File .\install.ps1` as shown. `irm | iex` is not affected.
+- **Corporate network blocks `raw.githubusercontent.com`** — clone the repo (or download the ZIP) and run `install.ps1` from it; it then uses the local files and needs no network.
+
+</details>
+
+### All platforms
+
+Existing files with the same name are backed up (`*.bak.<timestamp>`), never overwritten silently. Releases are listed in [`CHANGELOG.md`](CHANGELOG.md); `CUADRILLA_REF` accepts any tag or branch (default `main`).
 
 ## Use
 
@@ -89,10 +132,16 @@ The best cost/quality trade-off is usually a **strong reasoning model for the or
 
 ```bash
 pip install pyyaml
-python3 scripts/validate.py   # lints frontmatter, rule ordering, references
+python3 scripts/validate.py          # lints frontmatter, rule ordering, references
+scripts/test-install.sh              # end-to-end test of install.sh in a temp HOME
+pwsh -File scripts/test-install.ps1  # end-to-end test of install.ps1 (Windows, or pwsh on Linux/macOS)
 ```
 
 The validator runs in CI on every PR. It fails on the mistakes that break agents silently: `*` catch-all not placed first, deprecated `tools:`, subagents without `task: deny`, references to agents that don't exist.
+
+CI also runs both installer tests — `install.sh` on Ubuntu (plus shellcheck) and `install.ps1` on Windows under both PowerShell 5.1 and 7 (plus PSScriptAnalyzer) — covering global, per-project, backups, uninstall and installs pinned to a tag.
+
+**Releasing:** add a `## vX.Y.Z — date` entry to `CHANGELOG.md`, merge to `main`, then tag that commit: `git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin vX.Y.Z`. Tags are never moved once pushed.
 
 ## License
 
