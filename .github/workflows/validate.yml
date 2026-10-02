@@ -5,6 +5,14 @@ on:
     branches: [main]
     tags: ["v*"]
   pull_request:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release a specific CHANGELOG version (e.g. v0.1.0). Empty = top of CHANGELOG.md"
+        required: false
+      ref:
+        description: "Commit to tag (e.g. a03ab80). Empty = the selected branch head"
+        required: false
 
 permissions:
   contents: read
@@ -24,8 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Shellcheck installer and tests
-        run: shellcheck install.sh scripts/test-install.sh
+      - name: Shellcheck installer, tests and release script
+        run: shellcheck install.sh scripts/test-install.sh scripts/release.sh
       - name: End-to-end install test
         run: scripts/test-install.sh
 
@@ -60,3 +68,22 @@ jobs:
           if ((Get-Content install.ps1 -Raw) -match '[^\x00-\x7F]') { throw "install.ps1 contains non-ASCII characters" }
       - name: End-to-end install test
         run: ./scripts/test-install.ps1
+
+  # Tags the version at the top of CHANGELOG.md (or the one given on a manual run) and
+  # publishes its GitHub Release -- only from main, and only after every check passed.
+  release:
+    needs: [lint-agents, install-linux, install-windows]
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # tags and older commits
+      - name: Tag and publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+          REF: ${{ inputs.ref }}
+        run: scripts/release.sh "$VERSION" "$REF"

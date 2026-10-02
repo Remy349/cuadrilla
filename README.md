@@ -141,7 +141,7 @@ The validator runs in CI on every PR. It fails on the mistakes that break agents
 
 CI also runs both installer tests — `install.sh` on Ubuntu (plus shellcheck) and `install.ps1` on Windows under both PowerShell 5.1 and 7 (plus PSScriptAnalyzer) — covering global, per-project, backups, uninstall and installs pinned to a tag.
 
-**Releasing:** add a `## vX.Y.Z — date` entry to `CHANGELOG.md`, merge to `main`, then tag that commit: `git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin vX.Y.Z`. Tags are never moved once pushed.
+**Releasing** is automated. Rename the top `## Unreleased` entry of `CHANGELOG.md` to `## vX.Y.Z — date` and merge to `main`: once every check passes, CI tags that commit and publishes the GitHub Release with the entry as notes ([`scripts/release.sh`](scripts/release.sh)). To release an older version at a specific commit, run the **validate** workflow from the Actions tab with `version` and `ref`. Tags are never moved once pushed; preview with `scripts/release.sh --dry-run`.
 
 ## License
 
