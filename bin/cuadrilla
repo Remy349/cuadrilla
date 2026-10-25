@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# cuadrilla — manage an installed Cuadrilla (https://github.com/Remy349/cuadrilla).
+# The global installer links this file into ~/.local/bin; it works on the clone it lives in.
+set -euo pipefail
+
+# Resolve symlinks without `readlink -f` (not available on older macOS).
+self="${BASH_SOURCE[0]}"
+while [[ -L "$self" ]]; do
+  dir="$(cd "$(dirname "$self")" && pwd)"
+  self="$(readlink "$self")"
+  [[ "$self" == /* ]] || self="$dir/$self"
+done
+repo="$(cd "$(dirname "$self")/.." && pwd)"
+
+usage() {
+  cat <<EOF
+Usage: cuadrilla <command> [options]
+
+Commands:
+  update [--ref <tag|branch>] [--format auto|v1|v2] [--project [dir]]
+             Fetch the latest Cuadrilla and reinstall it. A branch install is pulled;
+             an install pinned to a release moves to the newest release. --ref picks
+             a specific tag or branch. --project refreshes <dir>/.opencode instead of the global install.
+  version    Show the installed version and where it lives.
+  uninstall [--project [dir]]
+             Remove Cuadrilla's agents, commands and this command.
+  help       Show this help.
+
+Clone: $repo
+EOF
+}
+
+command="${1:-help}"
+[[ $# -gt 0 ]] && shift
+case "$command" in
+  update)    exec bash "$repo/install.sh" --update "$@" ;;
+  uninstall) exec bash "$repo/install.sh" --uninstall "$@" ;;
+  version|--version|-v)
+    echo "cuadrilla $(git -C "$repo" describe --tags --always --dirty 2>/dev/null || echo unknown)"
+    echo "clone:  $repo"
+    config="${XDG_CONFIG_HOME:-$HOME/.config}/opencode/.cuadrilla-manifest"
+    if [[ -f "$config" ]]; then
+      sed -n 's/^# format: \(.*\)$/global: \1/p' "$config"
+    fi
+    ;;
+  help|-h|--help) usage ;;
+  *) echo "cuadrilla: unknown command '$command'" >&2; usage >&2; exit 1 ;;
+esac
