@@ -1,0 +1,4 @@
+# Agents, commands and scripts must keep LF endings on every OS: a CRLF checkout breaks
+# frontmatter parsing and shell scripts. (.cmd files are the exception: cmd.exe wants CRLF.)
+* text=auto eol=lf
+*.cmd text eol=crlf
