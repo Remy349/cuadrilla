@@ -3,11 +3,18 @@ description: Software architect. Designs module boundaries, contracts and data f
 mode: subagent
 temperature: 0.2
 permission:
-  read: allow
+  read:
+    "*": allow
+    "*.env": ask
+    "*.env.*": ask
+    "*.env.example": allow
   glob: allow
   grep: allow
   list: allow
   webfetch: ask
+  websearch: ask
+  browser: deny
+  external_directory: deny
   task: deny
   edit:
     "*": deny

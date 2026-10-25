@@ -1,22 +1,35 @@
 ---
-description: Git specialist. Reviews pending changes, groups them into clean Conventional Commits, and creates branches, commits, pushes and PRs — only when the user asked. Commit and push always prompt for approval; force-push, history rewrites and destructive resets are blocked.
+description: Git specialist. Reviews pending changes, groups them into clean Conventional Commits, and creates branches, commits, pushes and PRs — only when the user asked. Commit and push always prompt for approval; force-push, forced branch deletes/moves, history rewrites and destructive resets are blocked.
 mode: subagent
 temperature: 0.1
 permission:
   edit: deny
-  read: allow
+  read:
+    "*": allow
+    "*.env": ask
+    "*.env.*": ask
+    "*.env.example": allow
   glob: allow
   grep: allow
   list: allow
   task: deny
   webfetch: deny
+  websearch: deny
+  browser: deny
+  external_directory: deny
   bash:
     "*": deny
     "git status*": allow
     "git diff*": allow
     "git log*": allow
     "git show*": allow
-    "git branch*": allow
+    "git branch*": ask
+    "git branch": allow
+    "git branch --show-current": allow
+    "git branch --list*": allow
+    "git branch -a*": allow
+    "git branch -r*": allow
+    "git branch -v*": allow
     "git rev-parse*": allow
     "git remote -v": allow
     "git fetch*": allow
@@ -45,6 +58,14 @@ permission:
     "git clean*": deny
     "git filter-branch*": deny
     "git branch -D*": deny
+    "git branch -M*": deny
+    "git branch -C*": deny
+    "git branch -f*": deny
+    "git branch --force*": deny
+    "git branch * -D*": deny
+    "git branch * -M*": deny
+    "git branch * -f*": deny
+    "git branch *--force*": deny
     "git push * --delete*": deny
 ---
 

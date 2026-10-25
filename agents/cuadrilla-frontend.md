@@ -3,12 +3,19 @@ description: Frontend web engineer. Implements components, pages, routing, clien
 mode: subagent
 permission:
   edit: allow
-  read: allow
+  read:
+    "*": allow
+    "*.env": ask
+    "*.env.*": ask
+    "*.env.example": allow
   glob: allow
   grep: allow
   list: allow
   task: deny
   webfetch: ask
+  websearch: ask
+  browser: ask
+  external_directory: ask
   bash:
     "*": ask
     "git status*": allow

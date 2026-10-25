@@ -3,12 +3,19 @@ description: Security & QA engineer. Audits changes for vulnerabilities (OWASP T
 mode: subagent
 temperature: 0.1
 permission:
-  read: allow
+  read:
+    "*": allow
+    "*.env": ask
+    "*.env.*": ask
+    "*.env.example": allow
   glob: allow
   grep: allow
   list: allow
   task: deny
   webfetch: ask
+  websearch: ask
+  browser: ask
+  external_directory: ask
   edit:
     "*": ask
     "*.test.*": allow

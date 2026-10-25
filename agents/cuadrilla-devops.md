@@ -3,12 +3,19 @@ description: DevOps/platform engineer. Owns Dockerfiles, compose files, CI/CD pi
 mode: subagent
 permission:
   edit: allow
-  read: allow
+  read:
+    "*": allow
+    "*.env": ask
+    "*.env.*": ask
+    "*.env.example": allow
   glob: allow
   grep: allow
   list: allow
   task: deny
   webfetch: ask
+  websearch: ask
+  browser: deny
+  external_directory: ask
   bash:
     "*": ask
     "git status*": allow
@@ -29,6 +36,10 @@ permission:
     "az bicep build*": allow
     "kubectl get*": allow
     "kubectl describe*": allow
+    "kubectl get secret*": deny
+    "kubectl get * secret*": deny
+    "kubectl describe secret*": deny
+    "kubectl describe * secret*": deny
     "terraform apply*": deny
     "terraform destroy*": deny
     "az group delete*": deny
