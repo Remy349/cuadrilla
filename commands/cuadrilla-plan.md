@@ -3,7 +3,7 @@ description: Cuadrilla — analyze a request and produce a delegation plan witho
 agent: cuadrilla
 ---
 
-PLANNING MODE — do not delegate any task that edits files, runs builds, or touches git. You may use `explore` and `cuadrilla-architect` for read-only analysis.
+PLANNING MODE — do not delegate any task that edits files, runs builds, or touches git. You may use `cuadrilla-explore` and `cuadrilla-architect` for read-only analysis.
 
 Request:
 $ARGUMENTS

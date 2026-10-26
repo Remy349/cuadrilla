@@ -3,12 +3,19 @@ description: Backend engineer. Implements server-side code — APIs, business lo
 mode: subagent
 permission:
   edit: allow
-  read: allow
+  read:
+    "*": allow
+    "*.env": ask
+    "*.env.*": ask
+    "*.env.example": allow
   glob: allow
   grep: allow
   list: allow
   task: deny
   webfetch: ask
+  websearch: ask
+  browser: deny
+  external_directory: ask
   bash:
     "*": ask
     "git status*": allow
