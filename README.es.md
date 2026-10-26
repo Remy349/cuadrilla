@@ -30,7 +30,7 @@ curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh |
 **Fijar una versión** (recomendado para equipos y setups reproducibles; versiones en [Releases](https://github.com/Remy349/cuadrilla/releases)):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.1.1 bash
+curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.2.0 bash
 ```
 
 **Por proyecto** (se copia a `.opencode/` para commitearlo con el equipo):
@@ -53,7 +53,7 @@ irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
 **Fijar una versión:**
 
 ```powershell
-$env:CUADRILLA_REF = "v0.1.1"; irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
+$env:CUADRILLA_REF = "v0.2.0"; irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
 ```
 
 **Por proyecto:**

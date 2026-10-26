@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.2.0 — 2026-10-26
 
 OpenCode 2.x support, hardened permissions and a `cuadrilla` command.
 

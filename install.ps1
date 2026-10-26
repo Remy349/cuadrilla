@@ -4,7 +4,7 @@
 #   Global (all projects), from the web - also adds the `cuadrilla` command to your PATH:
 #     irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
 #   Pin a version:
-#     $env:CUADRILLA_REF = "v0.1.1"; irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
+#     $env:CUADRILLA_REF = "v0.2.0"; irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
 #
 #   Update an existing install (same as `cuadrilla update`):
 #     .\install.ps1 -Update [-Ref <tag|branch>] [-Project <dir>]

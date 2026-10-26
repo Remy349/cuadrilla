@@ -4,7 +4,7 @@
 #   Global (all projects), symlinked, plus the `cuadrilla` command in ~/.local/bin:
 #     curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | bash
 #   Pin a version (remote installs only; a clone installs whatever it has checked out):
-#     curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.1.1 bash
+#     curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.2.0 bash
 #   or, from a clone:
 #     ./install.sh
 #
@@ -41,7 +41,7 @@ Options:
   --link            Symlink files (default for global)
   --format <f>      auto (default), v1 or v2 — which agent format to install (see below)
   --update          Update the Cuadrilla clone, then reinstall from it
-  --ref <ref>       Tag or branch to install or update to (e.g. v0.1.1, main)
+  --ref <ref>       Tag or branch to install or update to (e.g. v0.2.0, main)
   --uninstall       Remove Cuadrilla agents, commands and the cuadrilla command
   -h, --help        Show this help
 Formats:
@@ -50,7 +50,7 @@ Formats:
         use them where any OpenCode 1.x reads this config.
   auto  v2 if OpenCode 2.x is the only version found on PATH, otherwise v1.
 Environment:
-  CUADRILLA_REF     Git branch or tag to install (default: main), e.g. v0.1.1
+  CUADRILLA_REF     Git branch or tag to install (default: main), e.g. v0.2.0
   CUADRILLA_FORMAT  Same as --format
   CUADRILLA_REPO    Git URL to clone (default: the GitHub repo)
   CUADRILLA_HOME    Where the repo is cloned for remote installs

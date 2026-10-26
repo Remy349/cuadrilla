@@ -54,7 +54,7 @@ curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh |
 **Pin a release** (recommended for teams and reproducible setups; versions on the [Releases](https://github.com/Remy349/cuadrilla/releases) page):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.1.1 bash
+curl -fsSL https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.sh | CUADRILLA_REF=v0.2.0 bash
 ```
 
 **Per project — to share with your team** (copied into `.opencode/`, commit it):
@@ -77,7 +77,7 @@ irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
 **Pin a release:**
 
 ```powershell
-$env:CUADRILLA_REF = "v0.1.1"; irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
+$env:CUADRILLA_REF = "v0.2.0"; irm https://raw.githubusercontent.com/Remy349/cuadrilla/main/install.ps1 | iex
 ```
 
 **Per project — to share with your team:**
